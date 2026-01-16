@@ -5,128 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎮 เช็คคนบิดเกม</title>
     <style>
-        /* ตกแต่งพื้นฐาน */
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #1a1a2e; color: #fff; text-align: center; padding: 20px; }
-        h2 { color: #e94560; }
-        .container { max-width: 500px; margin: 0 auto; background: #16213e; padding: 25px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        
-        /* ส่วนเลือกเพื่อนแบบเฟี้ยวๆ */
-        .friend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        /* ซ่อนปุ่ม Radio แบบเดิมๆ */
-        .friend-option input[type="radio"] { display: none; }
-        /* ออกแบบการ์ดเพื่อน */
-        .friend-card { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; opacity: 0.6; }
-        .friend-card:hover { transform: translateY(-5px); opacity: 1; }
-        .friend-img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; border: 3px solid transparent; transition: 0.3s; }
-        .friend-name { margin-top: 8px; font-size: 14px; font-weight: bold; }
-        
-        /* เมื่อถูกเลือก ให้เด้งและมีขอบสีทอง */
-        .friend-option input[type="radio"]:checked + .friend-card { opacity: 1; transform: scale(1.1); }
-        .friend-option input[type="radio"]:checked + .friend-card .friend-img { border-color: #ffd700; box-shadow: 0 0 15px #ffd700; }
-
-        /* ส่วนเลือกสถานะ */
-        .status-select { width: 100%; padding: 15px; margin-bottom: 20px; border-radius: 10px; border: none; background: #0f3460; color: white; font-size: 16px; }
-        
-        /* ปุ่มกดส่ง */
-        .btn-send { width: 100%; padding: 15px; border: none; border-radius: 10px; background: linear-gradient(45deg, #e94560, #ff6b81); color: white; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-send:hover { box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4); }
-        .btn-send:disabled { background: #555; cursor: not-allowed; }
+        body { font-family: sans-serif; background-color: #1a1a2e; color: #fff; text-align: center; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: #16213e; padding: 25px; border-radius: 15px; }
+        .btn-report { background: #ffd700; color: #000; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+        .friend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 15px; margin: 20px 0; }
+        .friend-card { cursor: pointer; opacity: 0.6; transition: 0.2s; }
+        .friend-card:hover { opacity: 1; transform: translateY(-5px); }
+        input[type="radio"]:checked + .friend-card { opacity: 1; transform: scale(1.1); }
+        input[type="radio"]:checked + .friend-card img { border: 3px solid #ffd700; }
+        img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
+        select, button { width: 100%; padding: 15px; margin-top: 15px; border-radius: 10px; border: none; font-size: 16px; }
+        select { background: #0f3460; color: white; }
+        button { background: #e94560; color: white; cursor: pointer; font-weight: bold; }
+        input[type="radio"] { display: none; }
     </style>
 </head>
 <body>
-
 <div class="container">
+    <a href="report.html" class="btn-report">📅 ดูบัญชีหนังหมา</a>
     <h2>🚀 วันนี้ใครมาบ้าง!</h2>
-    <p style="color: #aaa; font-size: 12px;">(เวลาจะบันทึกอัตโนมัติเมื่อกดส่ง)</p>
-
     <div class="friend-grid">
-        <label class="friend-option">
-            <input type="radio" name="friend" value="พี่เบียร์" checked>
-            <div class="friend-card">
-                <img src="beer.jpg" class="friend-img"> <span class="friend-name">พี่เบียร์</span>
-            </div>
-        </label>
-        
-        <label class="friend-option">
-            <input type="radio" name="friend" value="ฟอร์ท">
-            <div class="friend-card">
-                <img src="fort.jpg" class="friend-img"> <span class="friend-name">ฟอร์ท</span>
-            </div>
-        </label>
-
-        <label class="friend-option">
-            <input type="radio" name="friend" value="เจ">
-            <div class="friend-card">
-                <img src="jay.jpg" class="friend-img"> <span class="friend-name">เจ</span>
-            </div>
-        </label>
-
-        <label class="friend-option">
-            <input type="radio" name="friend" value="นาย">
-            <div class="friend-card">
-                <img src="nine.jpg" class="friend-img"> <span class="friend-name">นาย</span>
-            </div>
-        </label>
-
-        <label class="friend-option">
-            <input type="radio" name="friend" value="โย">
-            <div class="friend-card">
-                <img src="yo.jpg" class="friend-img"> <span class="friend-name">โย</span>
-            </div>
-        </label>
+        <label><input type="radio" name="friend" value="พี่เบียร์"><div class="friend-card"><img src="beer.jpg"><br>พี่เบียร์</div></label>
+        <label><input type="radio" name="friend" value="ฟอร์ท"><div class="friend-card"><img src="fort.jpg"><br>ฟอร์ท</div></label>
+        <label><input type="radio" name="friend" value="เจ"><div class="friend-card"><img src="jay.jpg"><br>เจ</div></label>
+        <label><input type="radio" name="friend" value="นาย"><div class="friend-card"><img src="nine.jpg"><br>นาย</div></label>
+        <label><input type="radio" name="friend" value="โย"><div class="friend-card"><img src="yo.jpg"><br>โย</div></label>
     </div>
-
-    <select class="status-select" id="gameStatus">
-        <option value="มาเล่น">✅ มาเล่น (แก๋ววว)</option>
-        <option value="บิด">🌪️ บิด (ไอ้ตูดหมึก)</option>
+    <select id="gameStatus">
+        <option value="มาเล่น">✅ มาเล่น</option>
+        <option value="บิด">🌪️ บิด</option>
     </select>
-
-    <button class="btn-send" onclick="sendData()" id="btnSubmit">บันทึกข้อมูล 🎮</button>
+    <button onclick="sendData()" id="btnSubmit">บันทึกข้อมูล 🎮</button>
 </div>
-
 <script>
-    // ----------------------------------------------------
-    // ⚠️ เอาลิงก์ URL ยาวๆ จาก PHASE 1 มาวางตรงนี้!!! ⚠️
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbxrx_-ypWYIiucwaZS-uwrax5VHYlNb8EZmhdsDYkXfrpcIPhdypt2Iib3ZQaU6krLvJQ/exec";
-    // ----------------------------------------------------
-
+    // ⚠️ ใส่ URL ของคุณตรงนี้
+    const SCRIPT_URL = "วาง_URL_ยาวๆ_ของคุณตรงนี้";
 
     function sendData() {
         const btn = document.getElementById('btnSubmit');
-        // หาว่าเลือกเพื่อนคนไหนอยู่
-        const selectedFriend = document.querySelector('input[name="friend"]:checked');
-        const status = document.getElementById('gameStatus').value;
-
-        if (!selectedFriend) { alert("เลือกเพื่อนก่อน!"); return; }
-
-        btn.disabled = true;
-        btn.innerText = "🚀 กำลังส่งข้อมูล...";
-
-        // แพ็คข้อมูลเตรียมส่ง
-        const dataToSend = {
-            name: selectedFriend.value,
-            status: status
-        };
-
-        // ยิงข้อมูลไปที่ Google Sheets
-        fetch(URL_SCRIPT, {
-            method: 'POST',
-            mode: 'no-cors', // สำคัญมาก ห้ามลบ
+        const friend = document.querySelector('input[name="friend"]:checked');
+        if (!friend) return alert("เลือกเพื่อนก่อน!");
+        
+        btn.innerText = "กำลังส่ง..."; btn.disabled = true;
+        
+        fetch(SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataToSend)
-        })
-        .then(() => {
-            alert(`บันทึกแล้ว! ${selectedFriend.value} สถานะ: ${status}`);
-            btn.disabled = false;
-            btn.innerText = "บันทึกข้อมูล 🎮";
-        })
-        .catch(error => {
-            alert("เกิดข้อผิดพลาด: " + error);
-            btn.disabled = false;
-            btn.innerText = "บันทึกข้อมูล 🎮";
-        });
+            body: JSON.stringify({ name: friend.value, status: document.getElementById('gameStatus').value })
+        }).then(() => {
+            alert("บันทึกแล้ว!"); location.reload();
+        }).catch(err => alert("Error: " + err));
     }
 </script>
-
 </body>
 </html>
