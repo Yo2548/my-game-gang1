@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>สรุปผลรายวัน</title>
+
+    <meta property="og:title" content="📝 สรุปบัญชีหนังหมา (รายวัน)">
+    <meta property="og:description" content="เข้าไปดูหลักฐานว่าวันนี้ใครมาเล่น หรือใครบิด!">
+    <meta property="og:image" content="https://yo2548.github.io/my-game-gang1/share-pic.jpg">
+    <meta property="og:type" content="website">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
@@ -77,15 +82,17 @@
 
 <script>
     // ------------------------------------------------
-    // ⚠️ ใส่ URL อันเดิมของคุณตรงนี้ !!!
+    // ⚠️⚠️ อย่าลืมใส่ URL Google Apps Script ตรงนี้ !!! ⚠️⚠️
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz07jUjbvxXhjR-pLzOZluFxZHAwEWRA1pQjDy_m51YIlB7uZGkqxJRtw4KSTZNp4B8Hw/exec";
     // ------------------------------------------------
     
+    // ตั้งชื่อไฟล์รูปให้ตรงกับใน GitHub
     const imgs = { "พี่เบียร์": "beer.jpg", "ฟอร์ท": "fort.jpg", "เจ": "jay.jpg", "นาย": "nine.jpg", "โย": "yo.jpg" };
     let allData = [];
 
     window.onload = () => {
         const d = new Date();
+        // ตั้งค่าปฏิทินเป็นวันปัจจุบัน
         document.getElementById('datePicker').value = d.toISOString().split('T')[0];
         fetch(SCRIPT_URL).then(r => r.json()).then(data => { allData = data; render(); });
     };
@@ -126,9 +133,9 @@
 
         const opt = {
             margin:       10,
-            filename:     `สรุปยอด_${dateVal}.pdf`, // ตั้งชื่อไฟล์ตามวันที่
+            filename:     `สรุปยอด_${dateVal}.pdf`,
             image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, backgroundColor: "#1a1a2e" }, // พื้นหลังสีเข้มตามธีม
+            html2canvas:  { scale: 2, backgroundColor: "#1a1a2e" }, 
             jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
         };
 
