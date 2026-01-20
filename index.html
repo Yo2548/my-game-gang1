@@ -3,118 +3,258 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 เช็คคนบิดเกม (VIP)</title>
+    <title>🎮 ลงชื่อตี้เกม (VIP)</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #1a1a2e; color: #fff; text-align: center; padding: 20px; }
-        .container { max-width: 500px; margin: 0 auto; background: #16213e; padding: 25px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .btn-report { background: #ffd700; color: #000; padding: 10px 20px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; }
-        .friend-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 15px; margin: 20px 0; }
-        .friend-card { cursor: pointer; opacity: 0.6; transition: 0.2s; position: relative; }
-        .friend-card:hover { opacity: 1; transform: translateY(-5px); }
-        input[type="radio"]:checked + .friend-card { opacity: 1; transform: scale(1.1); }
-        input[type="radio"]:checked + .friend-card img { border: 3px solid #ffd700; box-shadow: 0 0 10px #ffd700; }
-        .already-done { opacity: 0.3 !important; pointer-events: none; filter: grayscale(100%); }
-        img { width: 70px; height: 70px; border-radius: 50%; object-fit: cover; }
-        select, button, input[type="password"] { width: 100%; padding: 15px; margin-top: 15px; border-radius: 10px; border: none; font-size: 16px; box-sizing: border-box; }
-        select { background: #0f3460; color: white; }
-        input[type="password"] { background: #232342; color: #ffd700; border: 2px solid #333; text-align: center; letter-spacing: 5px; font-weight: bold; }
-        button { background: #e94560; color: white; cursor: pointer; font-weight: bold; margin-top: 10px;}
-        button:disabled { background: #555; cursor: not-allowed; }
+        body {
+            font-family: 'Kanit', sans-serif;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: #1e1e24;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            border-top: 5px solid #00d2d3; /* เส้นสีฟ้านีออน */
+        }
+
+        /* ปุ่มไปหน้า Report */
+        .btn-history {
+            display: inline-block;
+            background: #2d3436;
+            color: #dfe6e9;
+            padding: 8px 15px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            transition: 0.3s;
+            border: 1px solid #444;
+        }
+        .btn-history:hover { background: #00d2d3; color: #000; border-color: #00d2d3; }
+
+        h2 { margin: 10px 0 5px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.1); }
+        .subtitle { color: #aaa; font-size: 0.9rem; margin-bottom: 25px; }
+
+        /* Grid เพื่อน */
+        .friend-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* แถวละ 5 คน */
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .friend-item { cursor: pointer; position: relative; }
+        .friend-item img {
+            width: 55px; height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #333;
+            transition: 0.3s;
+            filter: grayscale(80%);
+        }
+        .friend-item span { display: block; font-size: 0.75rem; margin-top: 5px; color: #888; }
+
+        /* Effect ตอนเลือกเพื่อน */
+        input[type="radio"]:checked + .friend-item img {
+            border-color: #00d2d3;
+            box-shadow: 0 0 15px #00d2d3;
+            transform: scale(1.1);
+            filter: grayscale(0%);
+        }
+        input[type="radio"]:checked + .friend-item span { color: #00d2d3; font-weight: bold; }
+
+        /* คนที่ลงแล้ว */
+        .already-done { opacity: 0.3; pointer-events: none; }
+        .already-done img { filter: grayscale(100%) brightness(0.5); border-color: red !important; }
+
+        /* Input & Select สวยๆ */
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { font-size: 0.9rem; color: #aaa; margin-left: 5px; }
+        
+        select, input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 5px;
+            border-radius: 12px;
+            border: 1px solid #333;
+            background: #2a2a35;
+            color: white;
+            font-size: 1rem;
+            font-family: 'Kanit';
+            outline: none;
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        select:focus, input:focus { border-color: #00d2d3; box-shadow: 0 0 8px rgba(0, 210, 211, 0.2); }
+
+        /* ปุ่ม Submit */
+        .btn-submit {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(45deg, #00d2d3, #0984e3);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 210, 211, 0.3);
+        }
+        .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 210, 211, 0.4); }
+        .btn-submit:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
+
         input[type="radio"] { display: none; }
-        .loading-text { font-size: 12px; color: #aaa; margin-top: 5px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <a href="report.html" class="btn-report">📅 ดูบัญชีหนังหมา</a>
-    <h2>🚀 วันนี้ใครมาบ้าง!</h2>
-    <div id="checkStatus" class="loading-text">กำลังเช็ครายชื่อ... ⏳</div>
+    <a href="report.html" class="btn-history"><i class="fas fa-history"></i> ดูประวัติย้อนหลัง</a>
+
+    <h2>🚀 วันนี้ใครมาบ้าง?</h2>
+    <div id="statusText" class="subtitle">กำลังโหลดรายชื่อ... ⏳</div>
 
     <div class="friend-grid">
-        <label><input type="radio" name="friend" value="พี่เบียร์"><div class="friend-card" id="card-พี่เบียร์"><img src="beer.jpg"><br>พี่เบียร์</div></label>
-        <label><input type="radio" name="friend" value="ฟอร์ท"><div class="friend-card" id="card-ฟอร์ท"><img src="fort.jpg"><br>ฟอร์ท</div></label>
-        <label><input type="radio" name="friend" value="เจ"><div class="friend-card" id="card-เจ"><img src="jay.jpg"><br>เจ</div></label>
-        <label><input type="radio" name="friend" value="นาย"><div class="friend-card" id="card-นาย"><img src="nine.jpg"><br>นาย</div></label>
-        <label><input type="radio" name="friend" value="โย"><div class="friend-card" id="card-โย"><img src="yo.jpg"><br>โย</div></label>
+        <label>
+            <input type="radio" name="friend" value="พี่เบียร์">
+            <div class="friend-item" id="card-พี่เบียร์"><img src="beer.jpg"><span>พี่เบียร์</span></div>
+        </label>
+        <label>
+            <input type="radio" name="friend" value="ฟอร์ท">
+            <div class="friend-item" id="card-ฟอร์ท"><img src="fort.jpg"><span>ฟอร์ท</span></div>
+        </label>
+        <label>
+            <input type="radio" name="friend" value="เจ">
+            <div class="friend-item" id="card-เจ"><img src="jay.jpg"><span>เจ</span></div>
+        </label>
+        <label>
+            <input type="radio" name="friend" value="นาย">
+            <div class="friend-item" id="card-นาย"><img src="nine.jpg"><span>นาย</span></div>
+        </label>
+        <label>
+            <input type="radio" name="friend" value="โย">
+            <div class="friend-item" id="card-โย"><img src="yo.jpg"><span>โย</span></div>
+        </label>
     </div>
 
-    <select id="gameSelect">
-        <option value="Valorant">🔫 Valorant</option>
-        <option value="PUBG">🍳 PUBG</option>
-        <option value="Green Hell">🌿 Green Hell</option>
-        <option value="Other">🎲 อื่นๆ</option>
-    </select>
+    <div class="form-group">
+        <label><i class="fas fa-gamepad"></i> วันนี้เล่นเกมอะไร:</label>
+        <select id="gameSelect">
+            <option value="Valorant">🔫 Valorant</option>
+            <option value="PUBG">🍳 PUBG</option>
+            <option value="Green Hell">🌿 Green Hell</option>
+            <option value="Other">🎲 อื่นๆ / คุยเล่น</option>
+        </select>
+    </div>
 
-    <select id="gameStatus">
-        <option value="มาเล่น">✅ มาเล่น</option>
-        <option value="บิด">🌪️ บิด</option>
-    </select>
+    <div class="form-group">
+        <label><i class="fas fa-toggle-on"></i> สถานะ:</label>
+        <select id="statusSelect" style="color: #00d2d3; font-weight: bold;">
+            <option value="มาเล่น">✅ มาเล่นชัวร์</option>
+            <option value="บิด">🌪️ บิด / ไม่ว่าง</option>
+        </select>
+    </div>
 
-    <input type="password" id="adminPass" placeholder="🔒 ใส่รหัสลับ (ถามแอดมิน)" maxlength="10">
-    <button onclick="sendData()" id="btnSubmit">บันทึกข้อมูล 🎮</button>
+    <div class="form-group">
+        <input type="password" id="adminPass" placeholder="🔒 ใส่รหัสลับ (Admin Pin)" maxlength="10" style="text-align: center; letter-spacing: 3px;">
+    </div>
+
+    <button onclick="sendData()" id="btnSubmit" class="btn-submit">บันทึกข้อมูล 💾</button>
 </div>
 
 <script>
-    // ⚠️⚠️ อย่าลืมแก้ลิงก์ตรงนี้เป็นของคุณ ⚠️⚠️
+    // ==========================================
+    // ⚠️⚠️ แก้ไข URL ตรงนี้ให้ถูกต้อง ⚠️⚠️
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxk7wWNAFnoC9eJ6ZrN22Xi7zoB-hoqPomVgJvkQaGGR5k9oGlBqq-DNQqxBq209FE14g/exec";
     const SECRET_PIN = "6767"; 
+    // ==========================================
 
     let todayRecordedNames = [];
 
+    // เช็คว่าใครลงไปแล้วบ้าง ตอนเปิดเว็บ
     window.onload = function() {
         fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
             const d = new Date();
             const todayStr = d.getDate() + "/" + (d.getMonth()+1) + "/" + d.getFullYear();
+
             data.forEach(item => {
                 if(item.date === todayStr) {
                     todayRecordedNames.push(item.name);
                     const card = document.getElementById('card-' + item.name);
-                    if(card) card.classList.add('already-done');
+                    if(card) {
+                        card.classList.add('already-done');
+                        card.innerHTML += '<i class="fas fa-check-circle" style="position:absolute; top:0; right:0; color:#2ecc71; background:white; border-radius:50%;"></i>';
+                    }
                 }
             });
-            document.getElementById('checkStatus').innerText = "พร้อมเช็คชื่อ!";
-            document.getElementById('checkStatus').style.color = "#4cd137";
+            document.getElementById('statusText').innerText = "เลือกชื่อตัวเองได้เลย 👇";
+            document.getElementById('statusText').style.color = "#aaa";
         })
-        .catch(err => { console.log(err); });
+        .catch(err => {
+            console.log(err);
+            document.getElementById('statusText').innerText = "⚠️ โหลดข้อมูลไม่ได้ (เช็คเน็ต)";
+        });
     }
 
     function sendData() {
         const btn = document.getElementById('btnSubmit');
         const friend = document.querySelector('input[name="friend"]:checked');
         const passInput = document.getElementById('adminPass').value;
+        const gameValue = document.getElementById('gameSelect').value;
+        const statusValue = document.getElementById('statusSelect').value;
+
+        // Validation
+        if (!friend) return alert("❌ กรุณาเลือกชื่อเพื่อนก่อน!");
+        if (todayRecordedNames.includes(friend.value)) return alert("⚠️ คนนี้ลงชื่อไปแล้ว!");
+        if (passInput !== SECRET_PIN) {
+            alert("⛔ รหัสผิด! ไปถามแอดมินมาใหม่");
+            return;
+        }
+
+        // Animation ปุ่มกด
+        btn.innerText = "กำลังส่งข้อมูล... 🚀"; 
+        btn.disabled = true;
+        btn.style.background = "#555";
         
-        // รับค่าเกมจาก Dropdown
-        const gameValue = document.getElementById('gameSelect').value; 
-
-        if (!friend) return alert("❌ เลือกเพื่อนก่อน!");
-        if (todayRecordedNames.includes(friend.value)) return alert("⚠️ คนนี้ลงไปแล้ว!");
-        if (passInput !== SECRET_PIN) return alert("⛔ รหัสผิด!");
-
-        btn.innerText = "กำลังส่ง..."; btn.disabled = true;
-        
-        // ส่งข้อมูล (ชื่อตัวแปรตรงกับ Google Script เป๊ะๆ)
-        const payload = {
-            name: friend.value,
-            status: document.getElementById('gameStatus').value,
-            game: gameValue  // ส่ง key ชื่อ "game" ไป
-        };
-
         fetch(SCRIPT_URL, {
             method: 'POST', 
             mode: 'no-cors',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
+            body: JSON.stringify({ 
+                name: friend.value, 
+                status: statusValue,
+                game: gameValue 
+            })
         }).then(() => {
-            alert("✅ บันทึกแล้ว! เล่น: " + gameValue); 
+            alert("✅ บันทึกสำเร็จ! (" + gameValue + ")"); 
             location.reload();
         }).catch(err => {
             alert("Error: " + err);
             btn.disabled = false;
+            btn.innerText = "บันทึกข้อมูล 💾";
+            btn.style.background = "linear-gradient(45deg, #00d2d3, #0984e3)";
         });
     }
 </script>
+
 </body>
 </html>
