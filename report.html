@@ -3,140 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📋 Game History Log</title>
-    
+    <title>📋 Game History (Debug Mode)</title>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        body {
-            font-family: 'Kanit', sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
+        body { font-family: 'Kanit', sans-serif; background-color: #121212; color: #e0e0e0; padding: 20px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 700px; }
-
-        /* Header & Filter */
-        .header-bar {
-            background: #1e1e24;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .header-top h2 { margin: 0; color: #ffd700; font-size: 1.4rem; }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        select {
-            padding: 10px 15px;
-            border-radius: 8px;
-            background: #333;
-            color: #fff;
-            border: 1px solid #555;
-            font-size: 1rem;
-            cursor: pointer;
-            font-family: 'Kanit';
-            outline: none;
-            min-width: 200px;
-        }
-
-        .btn-action {
-            text-decoration: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            color: white;
-            transition: 0.2s;
-        }
+        .header-bar { background: #1e1e24; padding: 20px; border-radius: 15px; margin-bottom: 20px; text-align: center; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header-top h2 { margin: 0; color: #ffd700; }
+        select { padding: 10px; border-radius: 8px; background: #333; color: white; border: 1px solid #555; width: 100%; max-width: 300px; }
+        .btn-action { padding: 8px 12px; border-radius: 5px; text-decoration: none; font-weight: bold; cursor: pointer; border: none; color: white; }
         .btn-back { background: #444; }
         .btn-pdf { background: #e74c3c; }
-        .btn-pdf:hover { background: #c0392b; }
-
-        /* Card แสดงผล */
-        .date-card {
-            background: #1e1e24;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            border-top: 4px solid #00d2d3;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .summary-info {
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: #aaa;
-        }
-
-        /* Table */
-        .history-table { width: 100%; border-collapse: collapse; }
-        .history-table td { padding: 12px 5px; border-bottom: 1px solid #2a2a35; vertical-align: middle; }
-        .history-table tr:last-child td { border-bottom: none; }
-
-        .col-time { width: 50px; color: #00d2d3; font-weight: bold; font-size: 0.9rem; text-align: center;}
         
-        /* ✅✅ CSS สำหรับส่วนแสดงชื่อและรูปภาพ ✅✅ */
-        .col-info {
-            display: flex;
-            align-items: center; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
-            gap: 12px; /* ระยะห่างระหว่างรูปกับชื่อ */
-        }
-        .profile-img-small {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #333;
-        }
-        .player-details {
-            display: flex;
-            flex-direction: column; /* ชื่ออยู่บน เกมอยู่ล่าง */
-        }
+        .date-card { background: #1e1e24; border-radius: 12px; padding: 20px; margin-top: 10px; border-top: 4px solid #00d2d3; }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .history-table td { padding: 10px 5px; border-bottom: 1px solid #333; vertical-align: middle; }
+        
+        /* Profile Image Styles */
+        .col-info { display: flex; align-items: center; gap: 10px; }
+        .profile-img-small { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #555; background: #000; }
+        .name-text { font-weight: bold; color: white; display: block; }
+        .game-tag { font-size: 0.75rem; background: #333; padding: 2px 6px; border-radius: 4px; color: #ccc; }
+        
+        .badge { padding: 4px 10px; border-radius: 15px; font-size: 0.8rem; }
+        .bg-ok { color: #2ecc71; background: rgba(46, 204, 113, 0.1); }
+        .bg-bad { color: #e74c3c; background: rgba(231, 76, 60, 0.1); }
 
-        .name-text { font-size: 1rem; font-weight: 600; color: #fff; }
-        .game-tag { font-size: 0.75rem; background: #2d3436; color: #dfe6e9; padding: 2px 8px; border-radius: 4px; margin-top: 2px; display: inline-block; }
-
-        .badge { padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; white-space: nowrap; }
-        .bg-ok { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
-        .bg-bad { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
-
-        #no-data { text-align: center; padding: 30px; color: #777; font-style: italic; display: none; }
-        #loading { text-align: center; margin-top: 50px; color: #666; }
+        #loading { text-align: center; margin-top: 50px; }
+        #error-msg { color: #ff6b6b; text-align: center; display: none; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -144,142 +42,163 @@
 <div class="container">
     <div class="header-bar">
         <div class="header-top">
-            <a href="index.html" class="btn-action btn-back"><i class="fas fa-arrow-left"></i> กลับ</a>
-            <h2>📜 บันทึกการเล่น</h2>
-            <button onclick="downloadPDF()" class="btn-action btn-pdf"><i class="fas fa-file-pdf"></i> PDF</button>
+            <a href="index.html" class="btn-action btn-back">⬅️ กลับ</a>
+            <h2>📜 ประวัติการเล่น</h2>
+            <button onclick="downloadPDF()" class="btn-action btn-pdf">PDF</button>
         </div>
-        <div class="controls">
-            <label style="color:#aaa;">เลือกวันที่ดู: </label>
+        <div>
             <select id="dateSelect" onchange="renderSelectedDate()">
                 <option value="">กำลังโหลด...</option>
             </select>
         </div>
     </div>
 
-    <div id="loading"><i class="fas fa-circle-notch fa-spin fa-2x"></i><br><br>กำลังดึงข้อมูล...</div>
-    <div id="report-content"></div>
-    <div id="no-data">❌ วันนี้ไม่มีข้อมูลการเล่น</div>
+    <div id="loading">⏳ กำลังโหลดข้อมูล...</div>
+    <div id="error-msg"></div> <div id="report-content"></div>
 </div>
 
 <script>
-    // ⚠️⚠️ อย่าลืมตรวจสอบ URL ⚠️⚠️
+    // ⚠️⚠️⚠️ ใส่ URL ของคุณตรงนี้ (เช็คดีๆ นะครับ) ⚠️⚠️⚠️
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxk7wWNAFnoC9eJ6ZrN22Xi7zoB-hoqPomVgJvkQaGGR5k9oGlBqq-DNQqxBq209FE14g/exec";
 
-    // ✅✅ ตั้งค่าการเชื่อมโยงชื่อกับไฟล์รูปภาพตรงนี้ ✅✅
-    // ต้องใส่ให้ครบทุกคน และชื่อไฟล์ต้องถูกต้องตามที่มีในโฟลเดอร์
+    // ตั้งค่ารูปภาพ
     const profileImages = {
         "พี่เบียร์": "beer.jpg",
         "ฟอร์ท": "fort.jpg",
         "เจ": "jay.jpg",
         "นาย": "nine.jpg",
         "โย": "yo.jpg"
-        // ถ้ามีคนเพิ่ม ก็มาเพิ่มบรรทัดตรงนี้: "ชื่อ": "ไฟล์รูป.jpg"
     };
-    const defaultImage = "https://cdn-icons-png.flaticon.com/512/847/847969.png"; // รูปสำรองเผื่อหาไม่เจอ
+    const defaultImage = "https://cdn-icons-png.flaticon.com/512/847/847969.png";
 
     let globalData = [];
 
     window.onload = function() {
+        console.log("Start fetching...");
         fetch(SCRIPT_URL)
         .then(res => res.json())
         .then(data => {
+            console.log("Data received:", data); // ดูใน Console (F12) ได้
             document.getElementById('loading').style.display = 'none';
+            
+            if (!Array.isArray(data) || data.length === 0) {
+                showError("โหลดสำเร็จ แต่ไม่มีข้อมูลใน Google Sheet หรือรูปแบบข้อมูลผิด");
+                return;
+            }
+
             globalData = data;
             initDateDropdown(data);
         })
         .catch(err => {
-            document.getElementById('loading').innerHTML = "❌ Error: " + err;
+            console.error("Fetch Error:", err);
+            document.getElementById('loading').style.display = 'none';
+            showError("❌ โหลดข้อมูลไม่ได้: " + err + "<br>ลองเช็ค URL หรือ Deploy ใหม่");
         });
+    }
+
+    function showError(msg) {
+        const errDiv = document.getElementById('error-msg');
+        errDiv.innerHTML = msg;
+        errDiv.style.display = 'block';
     }
 
     function initDateDropdown(data) {
-        const select = document.getElementById('dateSelect');
-        select.innerHTML = "";
-        const uniqueDates = [...new Set(data.map(item => item.date))];
-        uniqueDates.reverse();
+        try {
+            const select = document.getElementById('dateSelect');
+            select.innerHTML = "";
+            const uniqueDates = [...new Set(data.map(item => item.date))];
+            uniqueDates.reverse();
 
-        if (uniqueDates.length === 0) {
-            select.innerHTML = "<option>ไม่มีประวัติ</option>";
-            renderSelectedDate(); // เรียกเพื่อเคลียร์หน้าจอ
-            return;
+            if (uniqueDates.length === 0) {
+                select.innerHTML = "<option>ไม่มีประวัติ</option>";
+                return;
+            }
+
+            uniqueDates.forEach(dateStr => {
+                const option = document.createElement('option');
+                option.value = dateStr;
+                option.text = dateStr;
+                select.appendChild(option);
+            });
+            select.selectedIndex = 0;
+            renderSelectedDate();
+        } catch (e) {
+            showError("Error creating dropdown: " + e);
         }
-
-        uniqueDates.forEach(dateStr => {
-            const option = document.createElement('option');
-            option.value = dateStr;
-            option.text = dateStr;
-            select.appendChild(option);
-        });
-        select.selectedIndex = 0;
-        renderSelectedDate();
     }
 
     function renderSelectedDate() {
-        const selectedDate = document.getElementById('dateSelect').value;
-        const contentDiv = document.getElementById('report-content');
-        const noDataDiv = document.getElementById('no-data');
-        
-        contentDiv.innerHTML = "";
-
-        if (!selectedDate) { // กรณีไม่มีข้อมูลเลย
-             noDataDiv.style.display = 'block';
-             return;
-        }
-
-        const dayData = globalData.filter(item => item.date === selectedDate);
-
-        if (dayData.length === 0) {
-            noDataDiv.style.display = 'block';
-            return;
-        }
-        noDataDiv.style.display = 'none';
-
-        const comeCount = dayData.filter(x => x.status.includes('มา')).length;
-        const notComeCount = dayData.length - comeCount;
-
-        let html = `
-            <div class="date-card">
-                <div class="summary-info">
-                    <span>📅 วันที่: ${selectedDate}</span>
-                    <span>มา: ${comeCount} | บิด: ${notComeCount}</span>
-                </div>
-                <table class="history-table">
-        `;
-
-        dayData.reverse().forEach(row => {
-            let statusBadge = row.status.includes('มา') 
-                ? `<span class="badge bg-ok"><i class="fas fa-check"></i> มาเล่น</span>` 
-                : `<span class="badge bg-bad"><i class="fas fa-times"></i> บิด</span>`;
+        try {
+            const selectedDate = document.getElementById('dateSelect').value;
+            const contentDiv = document.getElementById('report-content');
             
-            let gameName = row.game && row.game !== "-" ? row.game : "ไม่ระบุ";
-            
-            // ✅✅ ดึงชื่อไฟล์รูปภาพจากตัวแปร profileImages ✅✅
-            // ถ้าไม่มีชื่อในรายการ ให้ใช้ defaultImage แทน
-            let imgFileName = profileImages[row.name] || defaultImage;
+            contentDiv.innerHTML = "";
+            const dayData = globalData.filter(item => item.date === selectedDate);
 
-            html += `
-                <tr>
-                    <td class="col-time">${row.time}</td>
-                    <td>
-                        <div class="col-info">
-                            <img src="${imgFileName}" alt="${row.name}" class="profile-img-small">
-                            <div class="player-details">
-                                <span class="name-text">${row.name}</span>
-                                <span class="game-tag">🎮 ${gameName}</span>
-                            </div>
-                        </div>
-                    </td>
-                    <td style="text-align:right;">${statusBadge}</td>
-                </tr>
+            if (dayData.length === 0) {
+                contentDiv.innerHTML = "<div style='text-align:center; margin-top:20px;'>ไม่พบข้อมูลของวันนี้</div>";
+                return;
+            }
+
+            // นับจำนวน
+            const comeCount = dayData.filter(x => x.status && x.status.includes('มา')).length;
+            const notComeCount = dayData.length - comeCount;
+
+            let html = `
+                <div class="date-card">
+                    <div style="display:flex; justify-content:space-between; border-bottom:1px solid #333; padding-bottom:10px; margin-bottom:10px; color:#aaa;">
+                        <span>📅 ${selectedDate}</span>
+                        <span>✅ ${comeCount} | ❌ ${notComeCount}</span>
+                    </div>
+                    <table class="history-table">
             `;
-        });
 
-        html += `</table></div>`;
-        contentDiv.innerHTML = html;
+            dayData.reverse().forEach(row => {
+                let statusBadge = (row.status && row.status.includes('มา')) 
+                    ? `<span class="badge bg-ok">มาเล่น</span>` 
+                    : `<span class="badge bg-bad">บิด</span>`;
+                
+                let gameName = row.game ? row.game : "-";
+                let imgFileName = profileImages[row.name] || defaultImage;
+
+                html += `
+                    <tr>
+                        <td style="width:50px; text-align:center; color:#00d2d3;">${row.time}</td>
+                        <td>
+                            <div class="col-info">
+                                <img src="${imgFileName}" class="profile-img-small" onerror="this.src='${defaultImage}'">
+                                <div>
+                                    <span class="name-text">${row.name}</span>
+                                    <span class="game-tag">${gameName}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="text-align:right;">${statusBadge}</td>
+                    </tr>
+                `;
+            });
+
+            html += `</table></div>`;
+            contentDiv.innerHTML = html;
+        } catch (e) {
+            showError("Error render data: " + e);
+        }
     }
 
     function downloadPDF() {
         const element = document.getElementById('report-content');
-        const selectedDate = document.getElementById('dateSelect').value || 'Report';
+        if(!element.innerText) return alert("ไม่มีข้อมูล");
         
-        if(element.innerHTML
+        const opt = {
+          margin: 0.5,
+          filename: 'Report.pdf',
+          image: { type: 'jpeg', quality: 0.98 },
+          html2canvas: { scale: 2, backgroundColor: "#1e1e24" },
+          jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().set(opt).from(element).save();
+    }
+</script>
+
+</body>
+</html>
