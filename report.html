@@ -42,7 +42,6 @@
 
         .header-top h2 { margin: 0; color: #ffd700; font-size: 1.4rem; }
 
-        /* ปุ่มกดและ Dropdown */
         .controls {
             display: flex;
             gap: 10px;
@@ -109,10 +108,28 @@
         .history-table td { padding: 12px 5px; border-bottom: 1px solid #2a2a35; vertical-align: middle; }
         .history-table tr:last-child td { border-bottom: none; }
 
-        .col-time { width: 50px; color: #00d2d3; font-weight: bold; font-size: 0.9rem; }
+        .col-time { width: 50px; color: #00d2d3; font-weight: bold; font-size: 0.9rem; text-align: center;}
         
-        .name-text { font-size: 1.1rem; font-weight: 600; color: #fff; display: block; }
-        .game-tag { font-size: 0.8rem; background: #2d3436; color: #dfe6e9; padding: 2px 8px; border-radius: 4px; margin-top: 4px; display: inline-block; }
+        /* ✅✅ CSS สำหรับส่วนแสดงชื่อและรูปภาพ ✅✅ */
+        .col-info {
+            display: flex;
+            align-items: center; /* จัดให้อยู่กึ่งกลางแนวตั้ง */
+            gap: 12px; /* ระยะห่างระหว่างรูปกับชื่อ */
+        }
+        .profile-img-small {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #333;
+        }
+        .player-details {
+            display: flex;
+            flex-direction: column; /* ชื่ออยู่บน เกมอยู่ล่าง */
+        }
+
+        .name-text { font-size: 1rem; font-weight: 600; color: #fff; }
+        .game-tag { font-size: 0.75rem; background: #2d3436; color: #dfe6e9; padding: 2px 8px; border-radius: 4px; margin-top: 2px; display: inline-block; }
 
         .badge { padding: 5px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; white-space: nowrap; }
         .bg-ok { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
@@ -125,14 +142,12 @@
 <body>
 
 <div class="container">
-    
     <div class="header-bar">
         <div class="header-top">
             <a href="index.html" class="btn-action btn-back"><i class="fas fa-arrow-left"></i> กลับ</a>
             <h2>📜 บันทึกการเล่น</h2>
             <button onclick="downloadPDF()" class="btn-action btn-pdf"><i class="fas fa-file-pdf"></i> PDF</button>
         </div>
-
         <div class="controls">
             <label style="color:#aaa;">เลือกวันที่ดู: </label>
             <select id="dateSelect" onchange="renderSelectedDate()">
@@ -142,19 +157,27 @@
     </div>
 
     <div id="loading"><i class="fas fa-circle-notch fa-spin fa-2x"></i><br><br>กำลังดึงข้อมูล...</div>
-
-    <div id="report-content">
-        </div>
-    
+    <div id="report-content"></div>
     <div id="no-data">❌ วันนี้ไม่มีข้อมูลการเล่น</div>
-
 </div>
 
 <script>
-    // ⚠️⚠️ อย่าลืมเช็ค URL ⚠️⚠️
+    // ⚠️⚠️ อย่าลืมตรวจสอบ URL ⚠️⚠️
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxk7wWNAFnoC9eJ6ZrN22Xi7zoB-hoqPomVgJvkQaGGR5k9oGlBqq-DNQqxBq209FE14g/exec";
 
-    let globalData = []; // ตัวแปรเก็บข้อมูลทั้งหมด
+    // ✅✅ ตั้งค่าการเชื่อมโยงชื่อกับไฟล์รูปภาพตรงนี้ ✅✅
+    // ต้องใส่ให้ครบทุกคน และชื่อไฟล์ต้องถูกต้องตามที่มีในโฟลเดอร์
+    const profileImages = {
+        "พี่เบียร์": "beer.jpg",
+        "ฟอร์ท": "fort.jpg",
+        "เจ": "jay.jpg",
+        "นาย": "nine.jpg",
+        "โย": "yo.jpg"
+        // ถ้ามีคนเพิ่ม ก็มาเพิ่มบรรทัดตรงนี้: "ชื่อ": "ไฟล์รูป.jpg"
+    };
+    const defaultImage = "https://cdn-icons-png.flaticon.com/512/847/847969.png"; // รูปสำรองเผื่อหาไม่เจอ
+
+    let globalData = [];
 
     window.onload = function() {
         fetch(SCRIPT_URL)
@@ -162,54 +185,47 @@
         .then(data => {
             document.getElementById('loading').style.display = 'none';
             globalData = data;
-            initDateDropdown(data); // สร้าง Dropdown วันที่
+            initDateDropdown(data);
         })
         .catch(err => {
             document.getElementById('loading').innerHTML = "❌ Error: " + err;
         });
     }
 
-    // 1. ฟังก์ชันสร้าง Dropdown วันที่
     function initDateDropdown(data) {
         const select = document.getElementById('dateSelect');
-        select.innerHTML = ""; // ล้างค่าเก่า
-
-        // ดึงวันที่ทั้งหมดแบบไม่ซ้ำ (Unique Dates)
+        select.innerHTML = "";
         const uniqueDates = [...new Set(data.map(item => item.date))];
-        
-        // เรียงวันที่ (Reverse เพื่อเอาล่าสุดขึ้นก่อน)
-        // หมายเหตุ: ข้อมูลใน Sheet เรียงจากเก่าไปใหม่ การ reverse คือเอาใหม่สุดขึ้นบน
         uniqueDates.reverse();
 
         if (uniqueDates.length === 0) {
             select.innerHTML = "<option>ไม่มีประวัติ</option>";
+            renderSelectedDate(); // เรียกเพื่อเคลียร์หน้าจอ
             return;
         }
 
-        // สร้าง Option ใน Dropdown
         uniqueDates.forEach(dateStr => {
             const option = document.createElement('option');
             option.value = dateStr;
             option.text = dateStr;
             select.appendChild(option);
         });
-
-        // ✅ Default: เลือกวันล่าสุด (Option แรก) เสมอ
         select.selectedIndex = 0;
-        
-        // สั่งวาดหน้าจอทันที
         renderSelectedDate();
     }
 
-    // 2. ฟังก์ชันแสดงข้อมูลตามวันที่เลือก
     function renderSelectedDate() {
         const selectedDate = document.getElementById('dateSelect').value;
         const contentDiv = document.getElementById('report-content');
         const noDataDiv = document.getElementById('no-data');
         
-        contentDiv.innerHTML = ""; // ล้างหน้าจอเก่า
+        contentDiv.innerHTML = "";
 
-        // กรองเอาเฉพาะข้อมูลของวันที่เลือก
+        if (!selectedDate) { // กรณีไม่มีข้อมูลเลย
+             noDataDiv.style.display = 'block';
+             return;
+        }
+
         const dayData = globalData.filter(item => item.date === selectedDate);
 
         if (dayData.length === 0) {
@@ -218,11 +234,9 @@
         }
         noDataDiv.style.display = 'none';
 
-        // นับจำนวนคน
         const comeCount = dayData.filter(x => x.status.includes('มา')).length;
         const notComeCount = dayData.length - comeCount;
 
-        // สร้าง HTML
         let html = `
             <div class="date-card">
                 <div class="summary-info">
@@ -232,20 +246,28 @@
                 <table class="history-table">
         `;
 
-        // วนลูปสร้างรายการ (เรียงเอาล่าสุดขึ้นก่อน)
         dayData.reverse().forEach(row => {
             let statusBadge = row.status.includes('มา') 
                 ? `<span class="badge bg-ok"><i class="fas fa-check"></i> มาเล่น</span>` 
                 : `<span class="badge bg-bad"><i class="fas fa-times"></i> บิด</span>`;
             
             let gameName = row.game && row.game !== "-" ? row.game : "ไม่ระบุ";
+            
+            // ✅✅ ดึงชื่อไฟล์รูปภาพจากตัวแปร profileImages ✅✅
+            // ถ้าไม่มีชื่อในรายการ ให้ใช้ defaultImage แทน
+            let imgFileName = profileImages[row.name] || defaultImage;
 
             html += `
                 <tr>
                     <td class="col-time">${row.time}</td>
-                    <td style="text-align:left;">
-                        <span class="name-text">${row.name}</span>
-                        <span class="game-tag">🎮 ${gameName}</span>
+                    <td>
+                        <div class="col-info">
+                            <img src="${imgFileName}" alt="${row.name}" class="profile-img-small">
+                            <div class="player-details">
+                                <span class="name-text">${row.name}</span>
+                                <span class="game-tag">🎮 ${gameName}</span>
+                            </div>
+                        </div>
                     </td>
                     <td style="text-align:right;">${statusBadge}</td>
                 </tr>
@@ -256,23 +278,8 @@
         contentDiv.innerHTML = html;
     }
 
-    // 3. ฟังก์ชันโหลด PDF (โหลดเฉพาะสิ่งที่เห็นบนหน้าจอ)
     function downloadPDF() {
         const element = document.getElementById('report-content');
-        const selectedDate = document.getElementById('dateSelect').value;
+        const selectedDate = document.getElementById('dateSelect').value || 'Report';
         
-        // ตั้งค่า PDF
-        const opt = {
-          margin:       0.5,
-          filename:     'GameReport_' + selectedDate.replace(/\//g, '-') + '.pdf', // ตั้งชื่อไฟล์ตามวันที่
-          image:        { type: 'jpeg', quality: 0.98 },
-          html2canvas:  { scale: 2, backgroundColor: "#1e1e24" }, // สีพื้นหลังตอนปริ้น
-          jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-
-        html2pdf().set(opt).from(element).save();
-    }
-</script>
-
-</body>
-</html>
+        if(element.innerHTML
